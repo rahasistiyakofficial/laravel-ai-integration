@@ -55,8 +55,8 @@ return [
 
         'tracking' => [
             'enabled' => env('AI_TRACKING_ENABLED', false),
-            'store_requests' => env('AI_STORE_REQUESTS', true),
-            'track_costs' => env('AI_TRACK_COSTS', true),
+            'store_requests' => env('AI_STORE_REQUESTS', false),
+            'track_costs' => env('AI_TRACK_COSTS', false),
         ],
 
         'vector_store' => [
