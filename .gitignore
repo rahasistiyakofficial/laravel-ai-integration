@@ -25,7 +25,8 @@ Homestead.json
 /public/build
 /storage/pail
 .env.backup
-# prompt.md
+prompt.md
+RELEASE.md
 .env.production
 .phpactor.json
 auth.json
