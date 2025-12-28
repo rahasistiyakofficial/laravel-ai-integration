@@ -28,6 +28,13 @@ return [
         ],
     ],
 
+    'cache' => [
+        'enabled' => env('AI_CACHE_ENABLED', true),
+        'driver' => env('AI_CACHE_DRIVER', 'redis'),
+        'ttl' => env('AI_CACHE_TTL', 3600), // seconds
+        'prefix' => 'ai',
+    ],
+
     'fallbacks' => [
         'openai' => ['anthropic', 'ollama'],
         'anthropic' => ['openai', 'groq'],

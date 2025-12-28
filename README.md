@@ -13,16 +13,20 @@
 
 ## ✨ Features
 
-- 🎯 **Multi-Provider Support**: OpenAI, Anthropic (Claude), Google (Gemini), Ollama, Groq
-- 💬 **Chat Completions**: Standard and real-time streaming responses
-- 🧠 **Vector Embeddings**: Generate embeddings for semantic search
+- 🎯 **5 AI Providers**: OpenAI, Anthropic (Claude), Google (Gemini), Ollama, Groq
+- 💬 **Chat Completion**: Standard and streaming responses
+- 🧠 **Embeddings**: Generate vector embeddings for semantic search
 - 🖼️ **Image Generation**: DALL-E and compatible APIs
 - 🛠️ **Function Calling**: Tool/function use support
-- 🔄 **Real-Time Streaming**: SSE streaming for chat responses
-- 🎨 **Eloquent Integration**: AI-powered model traits
-- ⚡ **Task Abstraction**: Pre-built tasks (classification, etc.)
-- 💻 **Artisan Commands**: CLI tools for code generation
-- 📦 **Queue Support**: Background job processing
+- 🔄 **Streaming**: Real-time SSE streaming for chat
+- 💾 **Response Caching**: Intelligent caching with Redis/database support (v2.0)
+- 💰 **Cost Tracking**: Token counting and cost calculation (v2.0)
+- 🔁 **Retry Logic**: Exponential backoff with circuit breaker (v2.0)
+- 📝 **Prompt Templates**: Reusable prompt system (v2.0)
+- 🎨 **Eloquent Integration**: Traits for AI-powered models
+- ⚡ **Task Abstraction**: Pre-built tasks for common operations
+- 💻 **Artisan Commands**: CLI for code generation, cache management, usage stats
+- 📦 **Jobs**: Queue support for background processing
 
 ---
 

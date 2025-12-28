@@ -29,6 +29,10 @@ class AiServiceProvider extends ServiceProvider
         $this->app->singleton('ai.image', function ($app) {
             return new Services\ImageService($app['ai.manager']);
         });
+
+        $this->app->singleton(\Rahasistiyak\LaravelAiIntegration\Services\CacheService::class, function ($app) {
+            return new Services\CacheService();
+        });
     }
 
     public function boot()
@@ -40,6 +44,8 @@ class AiServiceProvider extends ServiceProvider
 
             $this->commands([
                 \Rahasistiyak\LaravelAiIntegration\Console\Commands\AiGenerateCodeCommand::class,
+                \Rahasistiyak\LaravelAiIntegration\Console\Commands\AiCacheClearCommand::class,
+                \Rahasistiyak\LaravelAiIntegration\Console\Commands\AiUsageCommand::class,
             ]);
         }
     }

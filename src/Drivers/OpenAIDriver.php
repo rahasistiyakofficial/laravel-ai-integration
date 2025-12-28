@@ -21,11 +21,11 @@ class OpenAIDriver extends AbstractDriver
             $payload['tools'] = $parameters['tools'];
         }
 
-        $response = $this->getRequest()->post($this->getBaseUrl() . '/chat/completions', $payload);
-
-        $response->throw();
-
-        return new ChatResponse($response->json());
+        return $this->executeWithRetry(function () use ($payload) {
+            $response = $this->getRequest()->post($this->getBaseUrl() . '/chat/completions', $payload);
+            $response->throw();
+            return new ChatResponse($response->json());
+        });
     }
 
     public function stream(array $messages, array $parameters = [], callable $callback)
