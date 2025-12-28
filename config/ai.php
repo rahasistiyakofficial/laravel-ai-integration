@@ -30,7 +30,7 @@ return [
 
     'cache' => [
         'enabled' => env('AI_CACHE_ENABLED', true),
-        'driver' => env('AI_CACHE_DRIVER', 'redis'),
+        'driver' => env('AI_CACHE_DRIVER', 'array'),
         'ttl' => env('AI_CACHE_TTL', 3600), // seconds
         'prefix' => 'ai',
     ],
@@ -54,7 +54,7 @@ return [
         ],
 
         'tracking' => [
-            'enabled' => env('AI_TRACKING_ENABLED', true),
+            'enabled' => env('AI_TRACKING_ENABLED', false),
             'store_requests' => env('AI_STORE_REQUESTS', true),
             'track_costs' => env('AI_TRACK_COSTS', true),
         ],
