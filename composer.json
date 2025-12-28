@@ -1,0 +1,59 @@
+{
+    "name": "rahasistiyak/laravel-ai-integration",
+    "description": "Comprehensive AI integration package for Laravel",
+    "keywords": [
+        "laravel",
+        "ai",
+        "openai",
+        "anthropic",
+        "llm",
+        "integration"
+    ],
+    "homepage": "https://github.com/rahasistiyak/laravel-ai-integration",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rahasistiyak",
+            "email": "info@rahasistiyak.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/contracts": "^11.0|^12.0",
+        "illuminate/support": "^11.0|^12.0",
+        "guzzlehttp/guzzle": "^7.8"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^9.0",
+        "pestphp/pest": "^2.0|^3.0",
+        "pestphp/pest-plugin-laravel": "^2.0|^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rahasistiyak\\LaravelAiIntegration\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rahasistiyak\\LaravelAiIntegration\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Rahasistiyak\\LaravelAiIntegration\\AiServiceProvider"
+            ],
+            "aliases": {
+                "AI": "Rahasistiyak\\LaravelAiIntegration\\Facades\\AI"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
