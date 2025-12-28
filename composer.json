@@ -1,5 +1,6 @@
 {
     "name": "rahasistiyak/laravel-ai-integration",
+    "version": "1.2.0",
     "description": "Comprehensive AI integration package for Laravel",
     "keywords": [
         "laravel",
@@ -14,7 +15,7 @@
     "authors": [
         {
             "name": "Rahasistiyak",
-            "email": "info@rahasistiyak.com"
+            "email": "rahasistiyak.official@gmail.com"
         }
     ],
     "require": {
