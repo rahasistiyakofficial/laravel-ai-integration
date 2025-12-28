@@ -46,6 +46,7 @@ class AiServiceProvider extends ServiceProvider
                 \Rahasistiyak\LaravelAiIntegration\Console\Commands\AiGenerateCodeCommand::class,
                 \Rahasistiyak\LaravelAiIntegration\Console\Commands\AiCacheClearCommand::class,
                 \Rahasistiyak\LaravelAiIntegration\Console\Commands\AiUsageCommand::class,
+                \Rahasistiyak\LaravelAiIntegration\Console\Commands\AiTestCommand::class,
             ]);
         }
     }

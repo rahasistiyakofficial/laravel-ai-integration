@@ -15,7 +15,7 @@ Enterprise-grade, multi-provider AI SDK with caching, cost tracking, and product
 
 **Laravel AI Integration** provides a unified, elegant API to interact with multiple AI providers including OpenAI, Anthropic (Claude), Google (Gemini), Ollama, and Groq. Built specifically for Laravel 11+, it abstracts provider complexity while offering powerful features like streaming, function calling, embeddings, and more.
 
-[Installation](#-installation) • [Quick Start](#-quick-start) • [Features](#-features) • [Documentation](#-documentation) • [Examples](#-examples)
+[Installation](#-installation) • [Usage](#-usage) • [Features](#-features) • [FAQ](FAQ.md) • [Examples](#-examples)
 
 </div>
 
@@ -321,9 +321,12 @@ ProcessAiTask::dispatch('classify', $text, [
 
 ### Custom Model Selection
 
+Use the `model()` method on the chat builder to specify a different model for the request:
+
 ```php
+// Use a specific model with the default provider
 AI::chat()
-    ->model('gpt-4')
+    ->model('gpt-4-turbo')
     ->messages([...])
     ->get();
 ```
