@@ -5,7 +5,7 @@
 [![Latest Version](https://img.shields.io/packagist/v/rahasistiyak/laravel-ai-integration.svg?style=flat-square)](https://packagist.org/packages/rahasistiyak/laravel-ai-integration)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/rahasistiyakofficial/laravel-ai-integration/tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/rahasistiyakofficial/laravel-ai-integration/actions)
 [![PHP Version](https://img.shields.io/packagist/php-v/rahasistiyak/laravel-ai-integration.svg?style=flat-square)](https://packagist.org/packages/rahasistiyak/laravel-ai-integration)
-[![License](https://img.shields.io/packagist/l/rahasistiyak/laravel-ai-integration.svg?style=flat-square)](https://github.com/rahasistiyakofficial/laravel-ai-integration/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/rahasistiyakofficial/laravel-ai-integration.svg?style=flat-square)](LICENSE)
 
 **Laravel AI Integration** provides a unified, elegant API to interact with multiple AI providers including OpenAI, Anthropic (Claude), Google (Gemini), Ollama, and Groq. Built specifically for Laravel 11+, it abstracts provider complexity while offering powerful features like streaming, function calling, embeddings, and more.
 
