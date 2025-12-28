@@ -13,6 +13,8 @@ Enterprise-grade, multi-provider AI SDK with caching, cost tracking, and product
 [![PHP Version](https://img.shields.io/packagist/php-v/rahasistiyak/laravel-ai-integration.svg?style=flat-square)](https://packagist.org/packages/rahasistiyak/laravel-ai-integration)
 [![License](https://img.shields.io/github/license/rahasistiyakofficial/laravel-ai-integration.svg?style=flat-square)](LICENSE)
 
+**Laravel AI Integration** provides a unified, elegant API to interact with multiple AI providers including OpenAI, Anthropic (Claude), Google (Gemini), Ollama, and Groq. Built specifically for Laravel 11+, it abstracts provider complexity while offering powerful features like streaming, function calling, embeddings, and more.
+
 [Installation](#-installation) • [Quick Start](#-quick-start) • [Features](#-features) • [Documentation](#-documentation) • [Examples](#-examples)
 
 </div>
@@ -75,32 +77,20 @@ echo $response->content();
 
 ## ✨ Features
 
-<table>
-<tr>
-<td width="50%">
-
-### 🎯 Core Features
-- **5 AI Providers** - OpenAI, Anthropic, Google, Groq, Ollama
-- **Unified API** - Same code, any provider
-- **Streaming** - Real-time SSE responses
-- **Function Calling** - Structured tool use
-- **Embeddings** - Vector generation
-- **Image Generation** - DALL-E support
-
-</td>
-<td width="50%">
-
-### 🚀 Production Ready (v2.0)
-- **Smart Caching** - 60-80% cost reduction
-- **Cost Tracking** - Token & expense analytics
-- **Circuit Breaker** - 99.9% uptime
-- **Retry Logic** - Exponential backoff
-- **Prompt Templates** - Reusable patterns
-- **Queue Support** - Background processing
-
-</td>
-</tr>
-</table>
+- 🎯 **5 AI Providers**: OpenAI, Anthropic (Claude), Google (Gemini), Ollama, Groq
+- 💬 **Chat Completion**: Standard and streaming responses
+- 🧠 **Embeddings**: Generate vector embeddings for semantic search
+- 🖼️ **Image Generation**: DALL-E and compatible APIs
+- 🛠️ **Function Calling**: Tool/function use support
+- 🔄 **Streaming**: Real-time SSE streaming for chat
+- 💾 **Response Caching**: Intelligent caching with Redis/database support (v2.0)
+- 💰 **Cost Tracking**: Token counting and cost calculation (v2.0)
+- 🔁 **Retry Logic**: Exponential backoff with circuit breaker (v2.0)
+- 📝 **Prompt Templates**: Reusable prompt system (v2.0)
+- 🎨 **Eloquent Integration**: Traits for AI-powered models
+- ⚡ **Task Abstraction**: Pre-built tasks for common operations
+- 💻 **Artisan Commands**: CLI for code generation, cache management, usage stats
+- 📦 **Jobs**: Queue support for background processing
 
 ---
 
