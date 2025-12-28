@@ -21,50 +21,97 @@ Enterprise-grade, multi-provider AI SDK with caching, cost tracking, and product
 
 ---
 
-## 🌟 Why Choose This Package?
+## ✨ Features
 
-```php
-// One API, Multiple AI Providers
-$response = AI::chat()
-    ->messages([['role' => 'user', 'content' => 'Explain Laravel']])
-    ->get();
-
-// Automatic caching, cost tracking, retry logic - out of the box!
-```
-
-**Built for Production** | **Developer First** | **Cost Optimized**
+- 🎯 **5 AI Providers**: OpenAI, Anthropic (Claude), Google (Gemini), Ollama, Groq
+- 💬 **Chat Completion**: Standard and streaming responses
+- 🧠 **Embeddings**: Generate vector embeddings for semantic search
+- 🖼️ **Image Generation**: DALL-E and compatible APIs
+- 🛠️ **Function Calling**: Tool/function use support
+- 🔄 **Streaming**: Real-time SSE streaming for chat
+- 💾 **Response Caching**: Intelligent caching with Redis/database support (v2.0)
+- 💰 **Cost Tracking**: Token counting and cost calculation (v2.0)
+- 🔁 **Retry Logic**: Exponential backoff with circuit breaker (v2.0)
+- 📝 **Prompt Templates**: Reusable prompt system (v2.0)
+- 🎨 **Eloquent Integration**: Traits for AI-powered models
+- ⚡ **Task Abstraction**: Pre-built tasks for common operations
+- 💻 **Artisan Commands**: CLI for code generation, cache management, usage stats
+- 📦 **Jobs**: Queue support for background processing
 
 ---
 
-## ⚡ Quick Start
+## 📦 Installation
 
-### Installation
+Install via Composer:
 
 ```bash
 composer require rahasistiyak/laravel-ai-integration
 ```
 
-### Configuration
+Publish the configuration file:
 
 ```bash
 php artisan vendor:publish --tag=ai-config
 ```
 
-Add your API key to `.env`:
+---
+
+## ⚙️ Configuration
+
+### Environment Variables
+
+Add your API keys to `.env`:
 
 ```env
 OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=sk-ant-...
+GOOGLE_API_KEY=...
+GROQ_API_KEY=...
+OLLAMA_BASE_URL=http://localhost:11434
+
 AI_DEFAULT_PROVIDER=openai
+
+# Optional: Enable Caching & Tracking (v2.0)
+AI_CACHE_ENABLED=true
+AI_TRACKING_ENABLED=true
 ```
 
-### Your First AI Request
+### Provider Configuration
+
+Edit `config/ai.php` to customize provider settings:
+
+```php
+return [
+    'default' => env('AI_DEFAULT_PROVIDER', 'openai'),
+
+    'providers' => [
+        'openai' => [
+            'driver' => 'openai',
+            'api_key' => env('OPENAI_API_KEY'),
+            'base_url' => env('OPENAI_BASE_URL', 'https://api.openai.com/v1'),
+            'timeout' => 30,
+            'models' => [
+                'chat' => ['gpt-4', 'gpt-3.5-turbo'],
+                'embedding' => ['text-embedding-ada-002'],
+            ],
+        ],
+        // Additional providers...
+    ],
+];
+```
+
+---
+
+## 🚀 Usage
+
+### Basic Chat
 
 ```php
 use Rahasistiyak\LaravelAiIntegration\Facades\AI;
 
 $response = AI::chat()
     ->messages([
-        ['role' => 'user', 'content' => 'Hello AI!']
+        ['role' => 'user', 'content' => 'Explain quantum computing in simple terms']
     ])
     ->get();
 
@@ -124,23 +171,37 @@ echo $response->content();
 
 ### Streaming Responses
 
+Stream responses in real-time:
+
 ```php
 AI::chat()
     ->messages([
-        ['role' => 'user', 'content' => 'Write a poem about code']
+        ['role' => 'user', 'content' => 'Write a short story about AI']
     ])
     ->stream(function ($chunk) {
-        echo $chunk; // Real-time output!
+        echo $chunk; // Output each chunk as it arrives
     });
 ```
 
-### Switch Providers
+### Using Different Providers
 
 ```php
-// Use Claude instead
+// Use Anthropic (Claude)
 $response = AI::driver('anthropic')
     ->chat([
         ['role' => 'user', 'content' => 'Hello Claude!']
+    ]);
+
+// Use Google Gemini
+$response = AI::driver('google')
+    ->chat([
+        ['role' => 'user', 'content' => 'Hello Gemini!']
+    ]);
+
+// Use Groq
+$response = AI::driver('groq')
+    ->chat([
+        ['role' => 'user', 'content' => 'Hello Groq!']
     ]);
 
 // Use local Ollama
@@ -150,13 +211,20 @@ $response = AI::driver('ollama')
     ]);
 ```
 
-### Generate Embeddings
+### Embeddings
+
+Generate vector embeddings for semantic search:
 
 ```php
-$embedding = AI::embed()->generate('Laravel is awesome!');
-// Returns: [0.0123, -0.0234, ...]
+$embedding = AI::embed()->generate('Your text here');
+// Returns: [0.0123, -0.0234, 0.0156, ...]
+```
 
-// Use with Eloquent models
+### Eloquent Model Integration
+
+Add AI capabilities to your models:
+
+```php
 use Rahasistiyak\LaravelAiIntegration\Traits\HasAiEmbeddings;
 
 class Article extends Model
@@ -164,10 +232,14 @@ class Article extends Model
     use HasAiEmbeddings;
 }
 
-$article->generateEmbedding();
+// Generate embeddings
+$article = Article::find(1);
+$embedding = $article->generateEmbedding();
 ```
 
-### Function Calling
+### Function Calling / Tools
+
+Use function calling for structured outputs:
 
 ```php
 $response = AI::chat()
@@ -176,178 +248,38 @@ $response = AI::chat()
             'type' => 'function',
             'function' => [
                 'name' => 'get_weather',
-                'description' => 'Get weather for a location',
+                'description' => 'Get the current weather for a location',
                 'parameters' => [
                     'type' => 'object',
                     'properties' => [
-                        'location' => ['type' => 'string'],
-                        'unit' => ['type' => 'string', 'enum' => ['celsius', 'fahrenheit']]
+                        'location' => [
+                            'type' => 'string',
+                            'description' => 'City name',
+                        ],
+                        'unit' => [
+                            'type' => 'string',
+                            'enum' => ['celsius', 'fahrenheit'],
+                        ],
                     ],
-                    'required' => ['location']
-                ]
-            ]
-        ]
-    ])
-    ->messages([
-        ['role' => 'user', 'content' => "What's the weather in Tokyo?"]
-    ])
-    ->get();
-```
-
-### Prompt Templates
-
-```php
-use Rahasistiyak\LaravelAiIntegration\Support\PromptTemplate;
-
-$prompt = PromptTemplate::load('classification')
-    ->with([
-        'text' => $userInput,
-        'categories' => 'Tech, Sports, Politics'
-    ])
-    ->toMessages();
-
-$category = AI::chat()->messages($prompt)->get();
-```
-
----
-
-## 🎁 v2.0 New Features
-
-### Response Caching
-
-**Save 60-80% on API costs automatically!**
-
-```php
-// First call - hits API
-$response = AI::chat()->messages([...])->get();
-
-// Second identical call - instant from cache!
-$cached = AI::chat()->messages([...])->get();
-```
-
-**Clear caches:**
-```bash
-php artisan ai:cache:clear
-```
-
-### Cost Tracking & Analytics
-
-**Track every dollar spent on AI**
-
-```bash
-# View detailed usage statistics
-php artisan ai:usage
-
-# Filter by provider and timeframe
-php artisan ai:usage --provider=openai --days=30
-```
-
-**Output:**
-```
-📊 AI Usage Overview (Last 7 days)
-
-Total Requests: 1,234
-Total Cost: $12.45
-Total Tokens: 450,000
-Avg Duration: 847 ms
-
-💾 Cache Performance
-Cache Hit Rate: 67.5%
-Cached Requests: 834 / 1,234
-Estimated Savings: $8.40
-```
-
-### Circuit Breaker & Retry Logic
-
-**99.9% uptime even when providers have issues**
-
-- ✅ Automatic retry with exponential backoff
-- ✅ Circuit breaker prevents cascading failures
-- ✅ Smart retry (skips 4xx errors)
-- ✅ Configurable thresholds
-
-**No configuration needed - works out of the box!**
-
----
-
-## ⚙️ Configuration
-
-### Environment Variables
-
-```env
-# === Provider API Keys ===
-OPENAI_API_KEY=sk-...
-ANTHROPIC_API_KEY=sk-ant-...
-GOOGLE_API_KEY=...
-GROQ_API_KEY=...
-OLLAMA_BASE_URL=http://localhost:11434
-
-# === Default Provider ===
-AI_DEFAULT_PROVIDER=openai
-
-# === Caching (v2.0) ===
-AI_CACHE_ENABLED=true
-AI_CACHE_DRIVER=redis      # array, redis, database
-AI_CACHE_TTL=3600          # seconds
-
-# === Cost Tracking (v2.0) - Optional ===
-AI_TRACKING_ENABLED=true
-AI_STORE_REQUESTS=true
-AI_TRACK_COSTS=true
-```
-
-### Advanced Configuration
-
-Edit `config/ai.php` for advanced options:
-
-```php
-return [
-    'default' => env('AI_DEFAULT_PROVIDER', 'openai'),
-    
-    'providers' => [
-        'openai' => [
-            'driver' => 'openai',
-            'api_key' => env('OPENAI_API_KEY'),
-            'models' => [
-                'chat' => ['gpt-4', 'gpt-3.5-turbo'],
-                'embedding' => ['text-embedding-ada-002'],
+                    'required' => ['location'],
+                ],
             ],
         ],
-        // ... more providers
-    ],
-    
-    'cache' => [
-        'enabled' => true,
-        'driver' => 'redis',
-        'ttl' => 3600,
-    ],
-];
-```
-
----
-
-## 🛠️ Advanced Usage
-
-### Custom Parameters
-
-```php
-$response = AI::chat()
-    ->model('gpt-4')
-    ->withParameters([
-        'temperature' => 0.7,
-        'max_tokens' => 500,
-        'top_p' => 0.9,
     ])
-    ->messages([...])
+    ->messages([
+        ['role' => 'user', 'content' => 'What\'s the weather in Tokyo?']
+    ])
     ->get();
 ```
 
 ### Task Abstraction
 
+Use pre-built tasks for common operations:
+
 ```php
-// Pre-built tasks for common operations
+// Text classification
 $category = AI::task()->classify(
-    'This GPU delivers incredible AI performance',
+    'This new GPU delivers incredible performance for AI workloads',
     ['Technology', 'Fashion', 'Sports', 'Politics']
 );
 // Returns: "Technology"
@@ -360,11 +292,20 @@ $image = AI::image()->generate('A futuristic city at sunset', [
     'size' => '1024x1024',
     'quality' => 'hd'
 ]);
+// Returns: ['url' => 'https://...']
+```
 
-echo $image['url']; // https://...
+### Console Commands
+
+Generate code via Artisan:
+
+```bash
+php artisan ai:generate-code "Create a UserObserver that logs model events" --language=php
 ```
 
 ### Background Jobs
+
+Process AI tasks in the background:
 
 ```php
 use Rahasistiyak\LaravelAiIntegration\Jobs\ProcessAiTask;
@@ -374,122 +315,82 @@ ProcessAiTask::dispatch('classify', $text, [
 ]);
 ```
 
-### Artisan Commands
-
-```bash
-# Generate code via AI
-php artisan ai:generate-code "Create a UserObserver that logs events"
-
-# Clear AI caches
-php artisan ai:cache:clear
-
-# View usage statistics
-php artisan ai:usage --provider=openai --days=30
-```
-
 ---
 
-## 📚 Documentation
+## 🛠️ Advanced Features
 
-### Table of Contents
-
-- [Installation](#-installation)
-- [Quick Start](#-quick-start)
-- [Configuration](#️-configuration)
-- [Basic Usage](#-examples)
-- [Advanced Features](#️-advanced-usage)
-- [v2.0 Features](#-v20-new-features)
-- [Upgrade Guide](UPGRADE.md)
-- [Changelog](CHANGELOG.md)
-- [Roadmap](ROADMAP.md)
-
-### Additional Resources
-
-- 📖 [Full Documentation](https://github.com/rahasistiyakofficial/laravel-ai-integration)
-- 🗺️ [Roadmap & Future Plans](ROADMAP.md)
-- 📝 [Changelog](CHANGELOG.md)
-- ⬆️ [Upgrade Guide](UPGRADE.md)
-
----
-
-## 🧪 Testing
-
-Run the test suite:
-
-```bash
-composer test
-
-# Or with coverage
-./vendor/bin/phpunit --coverage-html coverage
-```
-
-All 26 tests passing ✅
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Here's how:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
----
-
-## 📋 Requirements
-
-| Requirement | Version |
-|------------|---------|
-| **PHP** | 8.2+ |
-| **Laravel** | 11.x or 12.x |
-| **Redis** (recommended) | Any |
-
----
-
-## 🔧 Troubleshooting
-
-| Issue | Solution |
-|-------|----------|
-| **401 Unauthorized** | Check API keys in `.env` |
-| **Connection Refused (Ollama)** | Run `ollama serve` |
-| **Cache not working** | Verify Redis is running: `redis-cli ping` |
-| **Timeout errors** | Increase `timeout` in provider config |
-
-### Debug Mode
+### Custom Model Selection
 
 ```php
-config(['app.debug' => true]);
+AI::chat()
+    ->model('gpt-4')
+    ->messages([...])
+    ->get();
+```
+
+### Custom Parameters
+
+```php
+AI::chat()
+    ->withParameters([
+        'temperature' => 0.9,
+        'max_tokens' => 500,
+        'top_p' => 0.95,
+    ])
+    ->messages([...])
+    ->get();
+```
+
+### Fluent API Chaining
+
+```php
+$response = AI::chat()
+    ->model('gpt-4')
+    ->withParameters(['temperature' => 0.7])
+    ->withTools([...])
+    ->messages([...])
+    ->get();
+```
+
+### Prompt Templates (v2.0)
+
+```php
+use Rahasistiyak\LaravelAiIntegration\Support\PromptTemplate;
+
+$prompt = PromptTemplate::load('classification')
+    ->with(['text' => $userInput, 'categories' => 'Tech, Sports'])
+    ->toMessages();
+
+$response = AI::chat()->messages($prompt)->get();
 ```
 
 ---
 
-## 📊 Performance
+## 🎁 v2.0 New Features
 
-| Metric | Without Cache | With Cache | Improvement |
-|--------|--------------|-----------|-------------|
-| Response Time | 500-2000ms | 10-50ms | **95% faster** |
-| API Cost | $1.00 | $0.20-0.40 | **60-80% savings** |
-| Uptime | ~95% | ~99.9% | **Circuit breaker** |
+### Response Caching
 
----
+Save 60-80% on API costs automatically:
 
-## 🗺️ Roadmap
+```php
+// First call - hits API
+$response = AI::chat()->messages([...])->get();
 
-**Coming in v2.5.0:**
-- Additional providers (Mistral, Cohere, HuggingFace)
-- Batch processing
-- Advanced task system
-- Testing utilities
+// Second identical call - instant from cache!
+$cached = AI::chat()->messages([...])->get();
+```
 
-**Coming in v3.0.0:**
-- Vector store integration (Pinecone, Weaviate)
-- RAG (Retrieval-Augmented Generation)
-- Semantic search
+### Cost Tracking
 
-See [ROADMAP.md](ROADMAP.md) for full details.
+Track usage and costs:
+
+```bash
+php artisan ai:usage --provider=openai
+```
+
+### Circuit Breaker
+
+Automatic retry with circuit breaker pattern ensures 99.9% uptime.
 
 ---
 
@@ -503,18 +404,6 @@ This package is open-source software licensed under the [MIT License](LICENSE).
 
 - **Author**: [Rahasistiyak](https://github.com/rahasistiyakofficial)
 - **Package**: [rahasistiyak/laravel-ai-integration](https://packagist.org/packages/rahasistiyak/laravel-ai-integration)
-
----
-
-## ⭐ Support
-
-If you find this package helpful:
-
-- ⭐ Star on [GitHub](https://github.com/rahasistiyakofficial/laravel-ai-integration)
-- 📢 Share with your team
-- 🐛 Report issues on [Issue Tracker](https://github.com/rahasistiyakofficial/laravel-ai-integration/issues)
-
----
 
 <div align="center">
 
